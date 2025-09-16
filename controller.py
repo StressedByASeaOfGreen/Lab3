@@ -36,10 +36,16 @@ class RestaurantController(Controller):
     def create_ui(self):
         self.view.create_restaurant_ui()
 
+    def table_touched(self,table_number):
+        self.view.create_table_ui(self.restaurant.tables[table_number])
+        self.view.set_controler()
 
 class TableController(Controller):
+    def create_ui(self):
+        self.view.create_table_ui(self.restaurant.tables[self.table_number])
+
+    def seat_touched(self,seat_number):
+        self.view.create_order_ui(self.restaurant.tables[self].seats[seat_number])
     pass
-
-
 class OrderController(Controller):
     pass
