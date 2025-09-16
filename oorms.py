@@ -8,6 +8,7 @@ from model import Restaurant
 
 class ServerView(tk.Frame):
 
+    # def __init__ crée le UI de la fenetre du server. N'ajoute pas les tables ni les sieges
     def __init__(self, master, restaurant):
         super().__init__(master)
         self.grid()
@@ -19,26 +20,32 @@ class ServerView(tk.Frame):
         self.controller = RestaurantController(self, restaurant)
         self.controller.create_ui()
 
+    # set_controller reset le controlleur
     def set_controller(self, controller):
         self.controller = controller
         self.controller.create_ui()
 
+
     def create_restaurant_ui(self):
-        self.canvas.delete(tk.ALL)
-        view_ids = []
-        for ix, table in enumerate(self.restaurant.tables):
+        self.canvas.delete(tk.ALL) # Efface tout ce qui est sur le canvas
+        view_ids = [] #liste vide pour stocker les table_ids
+        for ix, table in enumerate(self.restaurant.tables): # Crée les table et leur donne un id
             table_id, seat_ids = self.draw_table(table, scale=RESTAURANT_SCALE)
             view_ids.append((table_id, seat_ids))
-        for ix, (table_id, seat_ids) in enumerate(view_ids):
+        for ix, (table_id, seat_ids) in enumerate(view_ids): # Ajoute les id a view_id
             # §54.7 "extra arguments trick" in Tkinter 8.5 reference by Shipman
             # Used to capture current value of ix as table_index for use when
             # handler is called (i.e., when screen is clicked).
-            def table_touch_handler(_, table_number=ix):
+            def table_touch_handler(_, table_number=ix): # Gere les cliques
                 self.controller.table_touched(table_number)
-            self.canvas.tag_bind(table_id, '<Button-1>', table_touch_handler)
-            for seat_id in seat_ids:
+            self.canvas.tag_bind(table_id, '<Button-1>', table_touch_handler) # Lie les clique au gestionnaire
+            for seat_id in seat_ids: # lie les siege au gestionnaire
                 self.canvas.tag_bind(seat_id, '<Button-1>', table_touch_handler)
 
+    #Supprime les éléments précédents du canvas.
+    #Dessine la table en utilisant self.draw_table.
+    #Attache un gestionnaire d'événements à chaque siège pour capturer le clic sur un siège.
+    #Crée un bouton "Done" qui appelle la méthode done du contrôleur.
     def create_table_ui(self, table):
         self.canvas.delete(tk.ALL)
         table_id, seat_ids = self.draw_table(table, location=SINGLE_TABLE_LOCATION)
@@ -49,6 +56,7 @@ class ServerView(tk.Frame):
             self.canvas.tag_bind(seat_id, '<Button-1>', handler)
         self.make_button('Done', action=lambda event: self.controller.done())
 
+    # Self explanatory
     def draw_table(self, table, location=None, scale=1):
         offset_x0, offset_y0 = location if location else table.location
         seats_per_side = math.ceil(table.n_seats / 2)
@@ -72,6 +80,7 @@ class ServerView(tk.Frame):
             seat_ids.append(seat_id)
         return table_id, seat_ids
 
+    #Crée une interface pour afficher les articles du menu et gérer les commandes.
     def create_order_ui(self, order):
         self.canvas.delete(tk.ALL)
         for ix, item in enumerate(self.restaurant.menu_items):
@@ -87,6 +96,7 @@ class ServerView(tk.Frame):
         self.make_button('Cancel', lambda event: self.controller.cancel(), location=BUTTON_BOTTOM_LEFT)
         self.make_button('Place Orders', lambda event: self.controller.update_order())
 
+    #draw_order: Dessine l'ordre actuel avec une liste d'articles commandés, ainsi que leur statut (commandé ou pas).
     def draw_order(self, order):
         x0, h, m = ORDER_ITEM_LOCATION
         for ix, item in enumerate(order.items):
@@ -99,6 +109,7 @@ class ServerView(tk.Frame):
                                 text=f'Total: {order.total_cost():.2f}',
                                 anchor=tk.NW)
 
+    #make_button: Crée un bouton graphique et le lie à une action lorsqu'il est cliqué.
     def make_button(self, text, action, size=BUTTON_SIZE, location=BUTTON_BOTTOM_RIGHT,
                     rect_style=BUTTON_STYLE, text_style=BUTTON_TEXT_STYLE):
         w, h = size
@@ -109,6 +120,7 @@ class ServerView(tk.Frame):
         self.canvas.tag_bind(label, '<Button-1>', action)
 
 
+#scale_and_offset: Fonction utilitaire pour appliquer une échelle et un décalage aux coordonnées.
 def scale_and_offset(x0, y0, width, height, offset_x0, offset_y0, scale):
     return ((offset_x0 + x0) * scale,
             (offset_y0 + y0) * scale,
