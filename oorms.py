@@ -96,7 +96,7 @@ class ServerView(tk.Frame):
         self.make_button('Cancel', lambda event: self.controller.cancel(), location=BUTTON_BOTTOM_LEFT)
         self.make_button('Place Orders', lambda event: self.controller.update_order())
 
-    #draw_order: Dessine l'ordre actuel avec une liste d'articles commandés, ainsi que leur statut (commandé ou pas).
+    # Dessine l'ordre actuel avec une liste d'articles commandés, ainsi que leur statut (commandé ou pas).
     def draw_order(self, order):
         x0, h, m = ORDER_ITEM_LOCATION
         for ix, item in enumerate(order.items):
@@ -109,7 +109,7 @@ class ServerView(tk.Frame):
                                 text=f'Total: {order.total_cost():.2f}',
                                 anchor=tk.NW)
 
-    #make_button: Crée un bouton graphique et le lie à une action lorsqu'il est cliqué.
+    # Crée un bouton graphique et le lie à une action lorsqu'il est cliqué.
     def make_button(self, text, action, size=BUTTON_SIZE, location=BUTTON_BOTTOM_RIGHT,
                     rect_style=BUTTON_STYLE, text_style=BUTTON_TEXT_STYLE):
         w, h = size
@@ -120,7 +120,7 @@ class ServerView(tk.Frame):
         self.canvas.tag_bind(label, '<Button-1>', action)
 
 
-#scale_and_offset: Fonction utilitaire pour appliquer une échelle et un décalage aux coordonnées.
+# Fonction utilitaire pour appliquer une échelle et un décalage aux coordonnées.
 def scale_and_offset(x0, y0, width, height, offset_x0, offset_y0, scale):
     return ((offset_x0 + x0) * scale,
             (offset_y0 + y0) * scale,

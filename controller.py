@@ -1,3 +1,6 @@
+from model import Order
+
+
 class Controller:
     """
     Do not modify this class, just its subclasses. Represents common behaviour of all
@@ -37,15 +40,27 @@ class RestaurantController(Controller):
         self.view.create_restaurant_ui()
 
     def table_touched(self,table_number):
-        self.view.create_table_ui(self.restaurant.tables[table_number])
-        self.view.set_controler()
+        table_controller = TableController(self.view, self.restaurant, table_number)
+        self.view.set_controller(table_controller)
 
 class TableController(Controller):
+    def __init__(self, view, restaurant, table_index): #Besoin car table_index est initié
+        super().__init__(view, restaurant) #besoin, car on a besoin de la class parent, qui est overide dans la ligne au-dessus
+        self.table_index = table_index # Attribut l'index de la table courrente
+        self.table = self.restaurant.tables[table_index] # Prend la table de la liste et la store
+
     def create_ui(self):
-        self.view.create_table_ui(self.restaurant.tables[self.table_number])
+        self.view.create_table_ui(self.table)
 
     def seat_touched(self,seat_number):
-        self.view.create_order_ui(self.restaurant.tables[self].seats[seat_number])
-    pass
+        order = self.table.orders[seat_number]
+        self.view.set_controller(OrderController(self.view, self.restaurant, self.table, order))
+
 class OrderController(Controller):
-    pass
+    def __init__(self, view, restaurant, table, order): # Same que TableController()
+        super().__init__(view, restaurant) # Same que TableController()
+        self.table = table # Nécessaire pour savoir quelle table est utilisée
+        self.order = order # Nécessaire pour savoir quel siège est utilisé
+
+    def create_ui(self):
+        self.view.create_order_ui(self.order)
