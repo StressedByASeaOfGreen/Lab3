@@ -5,7 +5,7 @@ class Restaurant:
 
     def __init__(self):
         self.tables = [Table(seats, loc) for seats, loc in TABLES]
-        #self.menu_items = [MenuItem(name, price) for name, price in MENU_ITEMS]
+        self.menu_items = [MenuItem(name, price) for name, price in MENU_ITEMS]
 
 
 class Table:
@@ -25,4 +25,5 @@ class OrderItem:
 
 
 class MenuItem:
+    #todo (par Abderr) creer un init pour cette classe conformant a l'appellation a la ligne 8 de ce file
     pass

@@ -64,3 +64,6 @@ class OrderController(Controller):
 
     def create_ui(self):
         self.view.create_order_ui(self.order)
+
+    def add_item(self, menu_item):
+        self.order.items.append(menu_item)
