@@ -40,14 +40,13 @@ class RestaurantController(Controller):
         self.view.create_restaurant_ui()
 
     def table_touched(self,table_number):
-        table_controller = TableController(self.view, self.restaurant, table_number)
+        table_controller = TableController(self.view, self.restaurant, self.restaurant.tables[table_number])
         self.view.set_controller(table_controller)
 
 class TableController(Controller):
-    def __init__(self, view, restaurant, table_index): #Besoin car table_index est initié
+    def __init__(self, view, restaurant, table): #Besoin car table_index est initié
         super().__init__(view, restaurant) #besoin, car on a besoin de la class parent, qui est overide dans la ligne au-dessus
-        self.table_index = table_index # Attribut l'index de la table courrente
-        self.table = self.restaurant.tables[table_index] # Prend la table de la liste et la store
+        self.table = table # Prend la table de la liste et la store
 
     def create_ui(self):
         self.view.create_table_ui(self.table)
@@ -67,3 +66,10 @@ class OrderController(Controller):
 
     def add_item(self, menu_item):
         self.order.items.append(menu_item)
+
+    def update_order(self):
+        pass
+
+    def cancel(self):
+        self.order.remove_unordered_items()
+        self.view.set_controller(TableController(self.view, self.restaurant, self.table))

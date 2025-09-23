@@ -15,15 +15,56 @@ class Table:
         self.location = location
         self.orders = [Order() for _ in range(seats)]
 
+    def has_order_for(self, seat):
+
+        for items in self.orders[seat].items:
+            if items.ordered == True:
+                return True
+        return False
+
+    def order_for(self, seat):
+        return self.orders[seat]
 
 class Order:
-    pass
+    def __init__(self):
+        self.items = []
+
+
+    def add_item(self, menu_item):
+        self.items.append(OrderItem(menu_item))
+
+    def unordered_items(self):
+        unordered_items = []
+        for items in self.items:
+            if items.ordered == False:
+                unordered_items.append(items)
+        return unordered_items
+
+    def place_new_order(self):
+        for items in self.items:
+            items.mark_as_ordered()
+
+    def remove_unordered_items(self):
+        for items in self.items:
+            if items.ordered == False:
+                self.items.remove(items)
+    def total_cost(self):
+        total_cost = 0.0
+        for items in self.items:
+            if items.ordered == True: #this can be removed if needed
+                total_cost += items.cost
+        return total_cost
 
 
 class OrderItem:
-    pass
+    def __init__(self, menu_item):
+        self.menu_item = menu_item
+        ordered = False
 
+    def mark_as_ordered(self):
+        self.ordered = True
 
 class MenuItem:
-    #todo (par Abderr) creer un init pour cette classe conformant a l'appellation a la ligne 8 de ce file
-    pass
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
