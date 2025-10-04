@@ -27,11 +27,10 @@ class Table:
 
 class Order:
     def __init__(self):
-        self.items = []
-
+        pass
 
     def add_item(self, menu_item):
-        self.items.append(OrderItem(menu_item))
+        return OrderItem(menu_item)
 
     def unordered_items(self):
         unordered_items = []
@@ -45,21 +44,24 @@ class Order:
             items.mark_as_ordered()
 
     def remove_unordered_items(self):
-        for items in self.items:
-            if items.ordered == False:
-                self.items.remove(items)
+        kept_items = []
+        for item in self.items:
+            if item.ordered:
+                kept_items.append(item)
+        self.items = kept_items
+
     def total_cost(self):
-        total_cost = 0.0
+        total_cost = 0
         for items in self.items:
-            if items.ordered == True: #this can be removed if needed
-                total_cost += items.cost
+            if items.ordered: #this can be removed if needed
+                total_cost += items.price
         return total_cost
 
 
 class OrderItem:
     def __init__(self, menu_item):
         self.menu_item = menu_item
-        ordered = False
+        self.ordered = False
 
     def mark_as_ordered(self):
         self.ordered = True

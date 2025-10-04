@@ -52,14 +52,18 @@ class TableController(Controller):
         self.view.create_table_ui(self.table)
 
     def seat_touched(self,seat_number):
-        order = self.table.orders[seat_number]
-        self.view.set_controller(OrderController(self.view, self.restaurant, self.table, order))
+        self.view.set_controller(OrderController(self.view, self.restaurant, self.table, seat_number))
+
+    def done(self):
+        self.view.set_controller(RestaurantController(self.view, self.restaurant))
+
 
 class OrderController(Controller):
-    def __init__(self, view, restaurant, table, order): # Same que TableController()
+    def __init__(self, view, restaurant, table, seat_number): # Same que TableController()
         super().__init__(view, restaurant) # Same que TableController()
-        self.table = table # Nécessaire pour savoir quelle table est utilisée
-        self.order = order # Nécessaire pour savoir quel siège est utilisé
+        self.table = table
+        self.seat_number = seat_number
+        self.order = table.order_for(seat_number)
 
     def create_ui(self):
         self.view.create_order_ui(self.order)
@@ -68,7 +72,8 @@ class OrderController(Controller):
         self.order.items.append(menu_item)
 
     def update_order(self):
-        pass
+        self.order.place_new_order()
+        self.view.set_controller(TableController(self.view, self.restaurant, self.table))
 
     def cancel(self):
         self.order.remove_unordered_items()
