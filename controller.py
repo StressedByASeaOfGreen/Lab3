@@ -69,7 +69,8 @@ class OrderController(Controller):
         self.view.create_order_ui(self.order)
 
     def add_item(self, menu_item):
-        self.order.items.append(menu_item)
+        self.order.add_item(menu_item)
+        self.create_ui()
 
     def update_order(self):
         self.order.place_new_order()

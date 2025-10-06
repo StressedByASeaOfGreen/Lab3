@@ -27,10 +27,10 @@ class Table:
 
 class Order:
     def __init__(self):
-        pass
+        self.items = []
 
     def add_item(self, menu_item):
-        return OrderItem(menu_item)
+        self.items.append(OrderItem(menu_item))
 
     def unordered_items(self):
         unordered_items = []
@@ -54,7 +54,7 @@ class Order:
         total_cost = 0
         for items in self.items:
             if items.ordered: #this can be removed if needed
-                total_cost += items.price
+                total_cost += items.menu_item.price
         return total_cost
 
 

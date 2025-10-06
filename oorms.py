@@ -101,7 +101,7 @@ class ServerView(tk.Frame):
         x0, h, m = ORDER_ITEM_LOCATION
         for ix, item in enumerate(order.items):
             y0 = m + ix * h
-            self.canvas.create_text(x0, y0, text=item.details.name,
+            self.canvas.create_text(x0, y0, text=item.menu_item.name,
                                     anchor=tk.NW)
             dot_style = ORDERED_STYLE if item.ordered else NOT_YET_ORDERED_STYLE
             self.canvas.create_oval(x0 - DOT_SIZE - DOT_MARGIN, y0, x0 - DOT_MARGIN, y0 + DOT_SIZE, **dot_style)
